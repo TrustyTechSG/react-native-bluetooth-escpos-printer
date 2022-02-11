@@ -521,35 +521,35 @@ RCT_EXPORT_METHOD(printQRCode:(NSString *)content
                   andResolver:(RCTPromiseResolveBlock) resolve
                   rejecter:(RCTPromiseRejectBlock) reject)
 {
-    NSLog(@"QRCODE TO PRINT: %@",content);
-    NSError *error = nil;
-    ZXEncodeHints *hints = [ZXEncodeHints hints];
-    hints.encoding=NSUTF8StringEncoding;
-    hints.margin=0;
-    hints.errorCorrectionLevel = [self findCorrectionLevel:correctionLevel];
+    // NSLog(@"QRCODE TO PRINT: %@",content);
+    // NSError *error = nil;
+    // ZXEncodeHints *hints = [ZXEncodeHints hints];
+    // hints.encoding=NSUTF8StringEncoding;
+    // hints.margin=0;
+    // hints.errorCorrectionLevel = [self findCorrectionLevel:correctionLevel];
     
-    ZXMultiFormatWriter *writer = [ZXMultiFormatWriter writer];
-    ZXBitMatrix *result = [writer encode:content
-                                  format:kBarcodeFormatQRCode
-                                   width:(int)size
-                                  height:(int)size
-                                    hints:hints
-                                   error:&error];
-    if(error || !result){
-        reject(@"ERROR_IN_CREATE_QRCODE",@"ERROR_IN_CREATE_QRCODE",nil);
-    }else{
-        CGImageRef image = [[ZXImage imageWithMatrix:result] cgimage];
-        uint8_t * graImage = [ImageUtils imageToGreyImage:[UIImage imageWithCGImage:image]];
-        unsigned char * formatedData = [ImageUtils format_K_threshold:graImage width:size height:size];
-        NSData *dataToPrint = [ImageUtils eachLinePixToCmd:formatedData nWidth:size nHeight:size nMode:0];
-        PrintImageBleWriteDelegate *delegate = [[PrintImageBleWriteDelegate alloc] init];
-        delegate.pendingResolve=resolve;
-        delegate.pendingReject = reject;
-        delegate.width = size;
-        delegate.toPrint  = dataToPrint;
-        delegate.now = 0;
-        [delegate print];
-    }
+    // ZXMultiFormatWriter *writer = [ZXMultiFormatWriter writer];
+    // ZXBitMatrix *result = [writer encode:content
+    //                               format:kBarcodeFormatQRCode
+    //                                width:(int)size
+    //                               height:(int)size
+    //                                 hints:hints
+    //                                error:&error];
+    // if(error || !result){
+    //     reject(@"ERROR_IN_CREATE_QRCODE",@"ERROR_IN_CREATE_QRCODE",nil);
+    // }else{
+    //     CGImageRef image = [[ZXImage imageWithMatrix:result] cgimage];
+    //     uint8_t * graImage = [ImageUtils imageToGreyImage:[UIImage imageWithCGImage:image]];
+    //     unsigned char * formatedData = [ImageUtils format_K_threshold:graImage width:size height:size];
+    //     NSData *dataToPrint = [ImageUtils eachLinePixToCmd:formatedData nWidth:size nHeight:size nMode:0];
+    //     PrintImageBleWriteDelegate *delegate = [[PrintImageBleWriteDelegate alloc] init];
+    //     delegate.pendingResolve=resolve;
+    //     delegate.pendingReject = reject;
+    //     delegate.width = size;
+    //     delegate.toPrint  = dataToPrint;
+    //     delegate.now = 0;
+    //     [delegate print];
+    // }
 }
 
 RCT_EXPORT_METHOD(printBarCode:(NSString *) str withType:(NSInteger)
@@ -595,21 +595,21 @@ RCT_EXPORT_METHOD(printBarCode:(NSString *) str withType:(NSInteger)
 //M:0,
 //Q:3,
 //H:2
--(ZXQRCodeErrorCorrectionLevel *)findCorrectionLevel:(NSInteger)level
-{
-    switch (level) {
-        case 1:
-            return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:0 bits:0x01 name:@"L"];
-            break;
-        case 2:
-             return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:3 bits:0x02 name:@"H"];
-        case 3:
-             return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:2 bits:0x03 name:@"Q"];
-        default:
-             return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:1 bits:0x00 name:@"M"];
-            break;
-    }
-}
+// -(ZXQRCodeErrorCorrectionLevel *)findCorrectionLevel:(NSInteger)level
+// {
+//     switch (level) {
+//         case 1:
+//             return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:0 bits:0x01 name:@"L"];
+//             break;
+//         case 2:
+//              return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:3 bits:0x02 name:@"H"];
+//         case 3:
+//              return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:2 bits:0x03 name:@"Q"];
+//         default:
+//              return [[ZXQRCodeErrorCorrectionLevel alloc] initWithOrdinal:1 bits:0x00 name:@"M"];
+//             break;
+//     }
+// }
 
 - (void) didWriteDataToBle: (BOOL)success{
     if(success){
